@@ -1,12 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
+using Microsoft.Extensions.Configuration;
+using NUnit.Framework.Internal;
+using PlaywrightFramework.Helpers;
+using PlaywrightFramework.Pages;
 
 namespace PlaywrightFramework.Tests
 {
-    internal class LoginTests
+    [TestFixture]
+    [Parallelizable(ParallelScope.Fixtures)]
+    public class LoginTests : BaseTest
     {
+
+        [Test]
+        public async Task TestSuccessfulLogin()
+        {
+            var loginPage = new LoginPage(BrowserWrapper, Configuration);
+
+            await loginPage.NavigateToAsync();
+            await loginPage.LoginAsync(Configuration["Username"]);
+
+            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+        }
     }
+
 }

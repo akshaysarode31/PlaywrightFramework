@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlaywrightFramework.Helpers
 {
     public static class BrowserHelper
     {
-        public static async Task<IPage> GetNewPageAsync(IConfiguration configuration, bool headless = true)
+        public static async Task<IPage> GetNewPageAsync(IConfiguration configuration, bool headless = false)
         {
             try
             {
