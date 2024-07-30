@@ -1,17 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using PlaywrightFramework.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PlaywrightFramework.Helpers;
+using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Tests
 {
     public class BaseTest
     {
-        protected IConfiguration Configuration { get; private set; }
-        protected BrowserWrapper BrowserWrapper { get; private set; }
+        protected Microsoft.Extensions.Configuration.IConfiguration Configuration { get; private set; }
+        protected Interface.IBrowserWrapper BrowserWrapper { get; private set; }
 
         [SetUp]
         public async Task SetUp()
@@ -20,15 +15,22 @@ namespace PlaywrightFramework.Tests
             Configuration = ConfigurationLoader.LoadConfiguration();
 
             // Initialize the browser and page
-            var page = await BrowserHelper.GetNewPageAsync(Configuration);
-            BrowserWrapper = new BrowserWrapper(page);
+            BrowserWrapper = await BrowserWrapper.CreateAsync(Configuration);
         }
 
         [TearDown]
         public async Task TearDown()
         {
+            // Stop tracing and save the trace
+            var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{TestContext.CurrentContext.Test.Name}.zip");
+            await BrowserWrapper.StopTracingAsync(tracePath);
+
             // Clean up resources
-            await BrowserWrapper.Page.CloseAsync();
+            BrowserWrapper?.Dispose();
+
+            // Add custom reporting logic if needed
+            TestContext.AddTestAttachment(tracePath, "Playwright Trace");
         }
     }
+
 }

@@ -1,45 +1,45 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Helpers;
-using System;
-using System.Threading.Tasks;
+using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Pages
 {
-    public class LoginPage
+    public class LoginPage : BasePage
     {
-        private readonly BrowserWrapper _browserWrapper;
-        private readonly IConfiguration _configuration;
-
-        public LoginPage(BrowserWrapper browserWrapper, IConfiguration configuration)
+        public LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration)
+         : base(browserWrapper, configuration)
         {
-            _browserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
+
+        public async Task InitializeAsync()
+        {
+            await base.InitializeAsync("Selectors");
         }
 
         public async Task NavigateToAsync()
         {
-            await _browserWrapper.NavigateToAsync($"{_configuration["BaseUrl"]}");
+            var url = Configuration["AppSettings:BaseUrl"];
+            await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");
         }
 
-        public async Task LoginAsync(string username)
+        public async Task LoginAsync()
         {
-            string password = _configuration["Password"];
-            await _browserWrapper.HandleAuthenticationAsync(username, password);
-            await _browserWrapper.FillAsync("input[name='username']", username);
-            await _browserWrapper.FillAsync("input[name='password']", password);
-            await _browserWrapper.ClickAsync("button[type='submit']");
-            await _browserWrapper.Page.WaitForNavigationAsync();
+            var username = Configuration["User:Username"];
+            var password = Configuration["Password"];
+
+            await FillAsync("LoginForm", "UsernameInput", username);
+            await FillAsync("LoginForm", "PasswordInput", password);
+            await ClickAsync("LoginForm", "LoginButton");
         }
 
         public async Task<bool> IsLoggedInAsync()
         {
-            return await _browserWrapper.IsVisibleAsync("#account-name");
+            return await IsVisibleAsync("Dashboard", "DashboardLabel");
         }
 
         public async Task<string> GetLoggedInUserNameAsync()
         {
-            return await _browserWrapper.GetTextContentAsync("#account-name");
+            return await GetTextContentAsync("Dashboard", "AccountName");
         }
     }
-
 }

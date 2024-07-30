@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace PlaywrightFramework.Helpers
 {
@@ -9,9 +8,9 @@ namespace PlaywrightFramework.Helpers
         {
             try
             {
-                string plainPassword = "admin123";
+                /*string plainPassword = "admin123";
                 string encryptedPassword2 = EncryptionHelper.Encrypt(plainPassword);
-                Console.WriteLine(encryptedPassword2);
+                Console.WriteLine("This is encrypted password "+encryptedPassword2);*/
 
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())

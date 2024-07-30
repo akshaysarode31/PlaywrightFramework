@@ -1,0 +1,23 @@
+LoginForm:
+  UsernameInput:
+    Type: placeholder
+    Value: 'Username'
+  PasswordInput:
+    Type: placeholder
+    Value: 'Password'
+  LoginButton:
+    Type: css
+    Value: 'button[Type="submit"]'
+  AccountName:
+    Type: css
+    Value: '#account-name'
+  RememberMeCheckbox:
+    Type: xpath
+    Value: '//input[@id="remember-me"]'
+  ForgotPasswordLink:
+    Type: text
+    Value: 'Forgot your password?'
+Dashboard:
+  DashboardLabel:
+    Type: "xpath"
+    Value: "//h6[text()='Dashboard']"

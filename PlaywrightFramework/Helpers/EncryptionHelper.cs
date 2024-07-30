@@ -5,8 +5,8 @@ namespace PlaywrightFramework.Helpers
 {
     public static class EncryptionHelper
     {
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("0123456789abcdef0123456789abcdef");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("abcdef9876543210");
+        private static readonly byte[] Key = Encoding.UTF8.GetBytes("1234569870abcdef0123456789abcdef");
+        private static readonly byte[] IV = Encoding.UTF8.GetBytes("abcdef1234567890");
 
         public static string Encrypt(string plainText)
         {

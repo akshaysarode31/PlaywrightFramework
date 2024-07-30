@@ -1,122 +1,134 @@
 ﻿using Microsoft.Playwright;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Helpers
 {
-    public class BrowserWrapper
+    public class BrowserWrapper : IBrowserWrapper
     {
-        public IPage Page { get; }
+        private readonly IBrowser _browser;
+        private readonly IPage _page;
+        private readonly IBrowserContext _context;
+        private readonly TracingManager _tracingManager;
 
-        public BrowserWrapper(IPage page)
+        public IPage Page => _page;
+
+        private BrowserWrapper(IBrowser browser, IBrowserContext context, IPage page, TracingManager tracingManager)
         {
-            Page = page ?? throw new ArgumentNullException(nameof(page));
-            Page.Dialog += HandleDialog;
+            _browser = browser;
+            _context = context;
+            _page = page;
+            _tracingManager = tracingManager;
         }
 
-        private async void HandleDialog(object sender, IDialog dialog)
+        public static async Task<IBrowserWrapper> CreateAsync(IConfiguration configuration)
         {
-            try
+            var browserName = configuration["Browser:Name"];
+            var headless = bool.Parse(configuration["Browser:Headless"]);
+            var incognito = bool.Parse(configuration["Browser:Incognito"]);
+            var viewportWidth = int.Parse(configuration["Browser:ViewportWidth"]);
+            var viewportHeight = int.Parse(configuration["Browser:ViewportHeight"]);
+            var slowMo = int.Parse(configuration["Browser:SlowMo"]);
+            var tracingEnabled = bool.Parse(configuration["Browser:Tracing"]);
+
+            var playwright = await Playwright.CreateAsync();
+            IBrowser browser;
+
+            if (browserName.ToLower() == "firefox")
             {
-                await dialog.AcceptAsync();
+                browser = await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
             }
-            catch (Exception ex)
+            else if (browserName.ToLower() == "webkit")
             {
-                throw new InvalidOperationException("Failed to handle dialog.", ex);
+                browser = await playwright.Webkit.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
             }
+            else
+            {
+                browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
+            }
+
+            var contextOptions = new BrowserNewContextOptions
+            {
+                ViewportSize = new ViewportSize
+                {
+                    Width = viewportWidth,
+                    Height = viewportHeight
+                }
+            };
+
+            var context = incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
+            var tracingManager = new TracingManager(context, tracingEnabled);
+
+            if (tracingEnabled)
+            {
+                await tracingManager.StartTracingAsync();
+            }
+
+            var page = await context.NewPageAsync();
+
+            return new BrowserWrapper(browser, context, page, tracingManager);
         }
 
         public async Task NavigateToAsync(string url)
         {
-            try
-            {
-                await Page.GotoAsync(url);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to navigate to {url}.", ex);
-            }
+            await _page.GotoAsync(url);
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         }
 
-        public async Task ClickAsync(string selector)
+        public async Task FillAsync(Selector selector, string value)
         {
-            try
-            {
-                await Page.ClickAsync(selector);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to click element {selector}.", ex);
-            }
+            var locator = GetLocator(selector.Type, selector.Value);
+            await locator.FillAsync(value);
         }
 
-        public async Task FillAsync(string selector, string text)
+        public async Task ClickAsync(Selector selector)
         {
-            try
-            {
-                await Page.FillAsync(selector, text);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to fill element {selector} with text.", ex);
-            }
+            var locator = GetLocator(selector.Type, selector.Value);
+            await locator.ClickAsync();
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         }
 
-        public async Task<bool> IsVisibleAsync(string selector)
+        public async Task<bool> IsVisibleAsync(Selector selector)
         {
-            try
-            {
-                return await Page.IsVisibleAsync(selector);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to check visibility of element {selector}.", ex);
-            }
+            var locator = GetLocator(selector.Type, selector.Value);
+            return await locator.IsVisibleAsync();
         }
 
-        public async Task HandleAuthenticationAsync(string username, string password)
+        public async Task<string> GetTextContentAsync(Selector selector)
         {
-            try
-            {
-                /*Page.Request += async (sender, request) =>
-                {
-                    if (request.Url.Contains("your_authentication_endpoint"))
-                    {
-                        await request.ContinueAsync(new RequestOptions
-                        {
-                            Headers = new Dictionary<string, string>
-                        {
-                            { "Authorization", $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"))}" }
-                        }
-                        });
-                    }
-                };*/
-
-                await Page.SetExtraHTTPHeadersAsync(new Dictionary<string, string>
-            {
-                { "Authorization", $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"))}" }
-            });
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Failed to handle authentication.", ex);
-            }
+            var locator = GetLocator(selector.Type, selector.Value);
+            return await locator.TextContentAsync();
         }
 
-        public async Task<string> GetTextContentAsync(string selector)
+        public async Task StopTracingAsync(string tracePath)
         {
-            try
+            await _tracingManager.StopTracingAsync(tracePath);
+        }
+
+        private ILocator GetLocator(string type, string value)
+        {
+            return type.ToLower() switch
             {
-                return await Page.TextContentAsync(selector);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to get text content of element {selector}.", ex);
-            }
+                "css" => _page.Locator(value),
+                "xpath" => _page.Locator($"xpath={value}"),
+                "text" => _page.Locator($"text={value}"),
+                "id" => _page.Locator($"id={value}"),
+                "placeholder" => _page.GetByPlaceholder(value),
+                "alttext" => _page.GetByAltText(value),
+                "label" => _page.GetByLabel(value),
+                "title" => _page.GetByTitle(value),
+                "testid" => _page.GetByTestId(value),
+                _ => throw new ArgumentException($"Unknown locator type: {type}"),
+            };
+        }
+
+        public void Dispose()
+        {
+            /*_page?.Dispose();
+            _context?.Dispose();
+            _browser?.Dispose();*/
         }
     }
+
 
 }
