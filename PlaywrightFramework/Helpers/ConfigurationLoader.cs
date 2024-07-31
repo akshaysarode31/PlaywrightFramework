@@ -14,7 +14,6 @@ namespace PlaywrightFramework.Helpers
 
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(Path.Combine(baseConfigPath, "TestSettings.json"), optional: true, reloadOnChange: true)
                     .AddJsonFile(Path.Combine(baseConfigPath, "appsettings.json"), optional: true, reloadOnChange: true);
 
                 var configuration = builder.Build();

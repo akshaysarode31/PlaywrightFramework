@@ -13,8 +13,9 @@ namespace PlaywrightFramework.Pages
 
         protected BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration)
         {
-            BrowserWrapper = browserWrapper;
-            Configuration = configuration;
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(browserWrapper));
+            BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
+            _selectors = new Dictionary<string, IDictionary<string, Selector>>();
         }
 
         public async Task InitializeAsync(params string[] pageNames)
@@ -40,7 +41,8 @@ namespace PlaywrightFramework.Pages
 
         public async Task NavigateToAsync(string url)
         {
-            await BrowserWrapper.NavigateToAsync(url);
+            //await BrowserWrapper.NavigateToAsync(url);
+            await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");
         }
 
         protected async Task FillAsync(string locatorSet, string selectorName, string value)

@@ -72,7 +72,7 @@ namespace PlaywrightFramework.Helpers
         public async Task NavigateToAsync(string url)
         {
             await _page.GotoAsync(url);
-            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            await _page.WaitForLoadStateAsync(LoadState.Load);
         }
 
         public async Task FillAsync(Selector selector, string value)
@@ -97,6 +97,7 @@ namespace PlaywrightFramework.Helpers
         public async Task<string> GetTextContentAsync(Selector selector)
         {
             var locator = GetLocator(selector.Type, selector.Value);
+
             return await locator.TextContentAsync();
         }
 

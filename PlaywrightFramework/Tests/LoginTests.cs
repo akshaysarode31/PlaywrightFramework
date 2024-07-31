@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework.Internal;
+using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
 
 namespace PlaywrightFramework.Tests
@@ -7,6 +8,7 @@ namespace PlaywrightFramework.Tests
     [Parallelizable(ParallelScope.All)]
     public class LoginTests : BaseTest
     {
+
         [Test]
         public async Task TestSuccessfulLogin()
         {
