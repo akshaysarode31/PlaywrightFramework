@@ -10,10 +10,11 @@ A test automation framework built with Playwright and .NET, designed to automate
 - Encrypted password handling
 - Tracing and recording functionality
 - Parallel test execution
+- SOLID principles applied
 
 ## Getting Started
 
-### Prerequisites
+### Prerequisites+
 
 - [.NET SDK](https://dotnet.microsoft.com/download)
 - [Node.js](https://nodejs.org/)
