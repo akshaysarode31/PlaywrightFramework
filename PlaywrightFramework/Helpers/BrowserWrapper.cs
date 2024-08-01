@@ -63,10 +63,6 @@ namespace PlaywrightFramework.Helpers
             var context = incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
             var tracingManager = new TracingManager(context, tracingEnabled);
 
-            if (tracingEnabled)
-            {
-                await tracingManager.StartTracingAsync();
-            }
 
             var page = await context.NewPageAsync();
 
@@ -76,7 +72,7 @@ namespace PlaywrightFramework.Helpers
         public async Task NavigateToAsync(string url)
         {
             await _page.GotoAsync(url);
-            await _page.WaitForLoadStateAsync(LoadState.Load);
+            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         }
 
         public async Task FillAsync(Selector selector, string value)
@@ -95,6 +91,7 @@ namespace PlaywrightFramework.Helpers
         public async Task<bool> IsVisibleAsync(Selector selector)
         {
             var locator = GetLocator(selector.Type, selector.Value);
+            await locator.WaitForAsync();
             return await locator.IsVisibleAsync();
         }
 
@@ -103,6 +100,11 @@ namespace PlaywrightFramework.Helpers
             var locator = GetLocator(selector.Type, selector.Value);
 
             return await locator.TextContentAsync();
+        }
+
+        public async Task StartTracingAsync(string traceName)
+        {
+            await _tracingManager.StartTracingAsync();
         }
 
         public async Task StopTracingAsync(string tracePath)
@@ -129,9 +131,16 @@ namespace PlaywrightFramework.Helpers
 
         public void Dispose()
         {
-            /*_page?.Dispose();
-            _context?.Dispose();
-            _browser?.Dispose();*/
+            _page?.CloseAsync().GetAwaiter().GetResult();
+            _context?.CloseAsync().GetAwaiter().GetResult();
+            _browser?.CloseAsync().GetAwaiter().GetResult();
+        }
+
+        public async Task DisposeAsync()
+        {
+            await _page.CloseAsync();
+            await _context.CloseAsync();
+            await _browser.CloseAsync();
         }
     }
 

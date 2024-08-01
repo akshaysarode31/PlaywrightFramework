@@ -17,20 +17,43 @@ namespace PlaywrightFramework.Tests
             Configuration = ConfigurationLoader.LoadConfiguration();
             // Initialize the browser and page
             BrowserWrapper = await PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(Configuration);
+            var tracingEnabled = bool.Parse(Configuration["Browser:Tracing"]);
+            if (tracingEnabled)
+            {
+                await BrowserWrapper.StartTracingAsync(TestContext.CurrentContext.Test.Name);
+            }
         }
 
         [TearDown]
         public async Task TearDown()
         {
-            // Stop tracing and save the trace
-            var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{TestContext.CurrentContext.Test.Name}.zip");
-            await BrowserWrapper.StopTracingAsync(tracePath);
+            
 
             // Clean up resources
-            BrowserWrapper?.Dispose();
+            if (BrowserWrapper != null)
+            {
+                await BrowserWrapper.DisposeAsync();
+            }
+        }
 
-            // Add custom reporting logic if needed
-            TestContext.AddTestAttachment(tracePath, "Playwright Trace");
+        [OneTimeTearDown]
+        public async Task OneTimeTearDown()
+        {
+            var tracingEnabled = bool.Parse(Configuration["Browser:Tracing"]);
+            if (tracingEnabled)
+            {
+                // Stop tracing and save the trace
+                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{TestContext.CurrentContext.Test.Name}.zip");
+                await BrowserWrapper.StopTracingAsync(tracePath);
+                // Add custom reporting logic if needed
+                TestContext.AddTestAttachment(tracePath, "Playwright Trace");
+            }
+            // Ensure all browser instances are closed
+            if (BrowserWrapper != null)
+            {
+                await BrowserWrapper.DisposeAsync();
+            }
+
         }
     }
 
