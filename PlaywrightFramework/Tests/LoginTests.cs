@@ -16,7 +16,6 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
     }

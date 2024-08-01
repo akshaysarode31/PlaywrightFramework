@@ -25,7 +25,7 @@ namespace PlaywrightFramework.Pages
         public async Task LoginAsync()
         {
             var username = Configuration["User:Username"];
-            var password = Configuration["Password"];
+            var password = Configuration["User:Password"];
 
             await FillAsync("LoginForm", "UsernameInput", username);
             await FillAsync("LoginForm", "PasswordInput", password);

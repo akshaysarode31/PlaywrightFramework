@@ -24,14 +24,14 @@ namespace PlaywrightFramework.Tests
         public async Task TearDown()
         {
             // Stop tracing and save the trace
-            //var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{TestContext.CurrentContext.Test.Name}.zip");
-            //await BrowserWrapper.StopTracingAsync(tracePath);
+            var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{TestContext.CurrentContext.Test.Name}.zip");
+            await BrowserWrapper.StopTracingAsync(tracePath);
 
             // Clean up resources
-            //BrowserWrapper?.Dispose();
+            BrowserWrapper?.Dispose();
 
             // Add custom reporting logic if needed
-            //TestContext.AddTestAttachment(tracePath, "Playwright Trace");
+            TestContext.AddTestAttachment(tracePath, "Playwright Trace");
         }
     }
 

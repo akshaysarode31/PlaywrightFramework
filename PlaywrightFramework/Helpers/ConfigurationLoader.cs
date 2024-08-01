@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace PlaywrightFramework.Helpers
 {
@@ -13,24 +15,35 @@ namespace PlaywrightFramework.Helpers
                 Console.WriteLine("This is encrypted password "+encryptedPassword2);*/
 
                 var builder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(Path.Combine(baseConfigPath, "appsettings.json"), optional: true, reloadOnChange: true);
+                    .SetBasePath(baseConfigPath)
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
                 var configuration = builder.Build();
+                var environment = configuration["Environment"];
 
+                // Load environment-specific configuration
+                if (!string.IsNullOrEmpty(environment))
+                {
+                    builder.AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true);
+                }
+
+                // Rebuild configuration to include environment-specific settings
+                configuration = builder.Build();
+
+                // Decrypt password if encrypted password file exists
                 string encryptedPasswordPath = Path.Combine(baseConfigPath, "encrypted_password.txt");
                 if (File.Exists(encryptedPasswordPath))
                 {
                     string encryptedPassword = File.ReadAllText(encryptedPasswordPath);
                     string decryptedPassword = EncryptionHelper.Decrypt(encryptedPassword);
-                    configuration["Password"] = decryptedPassword;
+                    configuration[$"{environment}:User:Password"] = decryptedPassword;
                 }
                 else
                 {
                     throw new FileNotFoundException("Encrypted password file not found.");
                 }
 
-                return configuration;
+                return configuration.GetSection(environment);
             }
             catch (Exception ex)
             {
