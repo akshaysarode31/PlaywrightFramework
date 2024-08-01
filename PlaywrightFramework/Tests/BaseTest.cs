@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
-using PlaywrightFramework.Pages;
 
 namespace PlaywrightFramework.Tests
 {

@@ -34,17 +34,21 @@ namespace PlaywrightFramework.Helpers
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 
-            if (browserName.ToLower() == "firefox")
+            // Using a dictionary for better readability and maintainability
+            var browserLaunchers = new Dictionary<string, Func<BrowserTypeLaunchOptions, Task<IBrowser>>>
+        {
+            { "firefox", playwright.Firefox.LaunchAsync },
+            { "webkit", playwright.Webkit.LaunchAsync },
+            { "chromium", playwright.Chromium.LaunchAsync },
+        };
+
+            if (browserLaunchers.TryGetValue(browserName, out var launcher))
             {
-                browser = await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
-            }
-            else if (browserName.ToLower() == "webkit")
-            {
-                browser = await playwright.Webkit.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
+                browser = await launcher(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
             }
             else
             {
-                browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
+                throw new ArgumentException($"Unsupported browser: {browserName}");
             }
 
             var contextOptions = new BrowserNewContextOptions

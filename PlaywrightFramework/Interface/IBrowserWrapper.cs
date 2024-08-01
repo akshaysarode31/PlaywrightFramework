@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
 using PlaywrightFramework.Helpers;
 
 namespace PlaywrightFramework.Interface

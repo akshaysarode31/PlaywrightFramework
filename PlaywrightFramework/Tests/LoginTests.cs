@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework.Internal;
-using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
 
 namespace PlaywrightFramework.Tests
