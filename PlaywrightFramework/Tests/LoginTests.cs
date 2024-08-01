@@ -4,6 +4,7 @@ using PlaywrightFramework.Pages;
 namespace PlaywrightFramework.Tests
 {
     [TestFixture]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.All)]
     public class LoginTests : BaseTest
     {

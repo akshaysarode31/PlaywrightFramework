@@ -23,18 +23,18 @@ namespace PlaywrightFramework.Helpers
 
         public static async Task<IBrowserWrapper> CreateAsync(IConfiguration configuration)
         {
-            var browserName = configuration["Browser:Name"];
-            var headless = bool.Parse(configuration["Browser:Headless"]);
-            var incognito = bool.Parse(configuration["Browser:Incognito"]);
-            var viewportWidth = int.Parse(configuration["Browser:ViewportWidth"]);
-            var viewportHeight = int.Parse(configuration["Browser:ViewportHeight"]);
-            var slowMo = int.Parse(configuration["Browser:SlowMo"]);
-            var tracingEnabled = bool.Parse(configuration["Browser:Tracing"]);
+            var browserName = configuration["Browser:Name"] ?? throw new ArgumentNullException("Browser:Name is missing");
+            var headless = bool.TryParse(configuration["Browser:Headless"], out var headlessValue) ? headlessValue : true;
+            var incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) ? incognitoValue : false;
+            var viewportWidth = int.TryParse(configuration["Browser:ViewportWidth"], out var viewportWidthValue) ? viewportWidthValue : 1920; // Default width
+            var viewportHeight = int.TryParse(configuration["Browser:ViewportHeight"], out var viewportHeightValue) ? viewportHeightValue : 1080; // Default height
+            var slowMo = int.TryParse(configuration["Browser:SlowMo"], out var slowMoValue) ? slowMoValue : 0;
+            var tracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) ? tracingEnabledValue : false;
+            var defaultTimeout = int.TryParse(configuration["Browser:DefaultTimeout"], out var defaultTimeoutValue) ? defaultTimeoutValue : 30000;
 
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 
-            // Using a dictionary for better readability and maintainability
             var browserLaunchers = new Dictionary<string, Func<BrowserTypeLaunchOptions, Task<IBrowser>>>
         {
             { "firefox", playwright.Firefox.LaunchAsync },
@@ -57,7 +57,7 @@ namespace PlaywrightFramework.Helpers
                 {
                     Width = viewportWidth,
                     Height = viewportHeight
-                }
+                },
             };
 
             var context = incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
@@ -65,14 +65,15 @@ namespace PlaywrightFramework.Helpers
 
 
             var page = await context.NewPageAsync();
-
+            page.SetDefaultTimeout(defaultTimeout);
+            page.SetDefaultNavigationTimeout(defaultTimeout);
             return new BrowserWrapper(browser, context, page, tracingManager);
         }
 
         public async Task NavigateToAsync(string url)
         {
             await _page.GotoAsync(url);
-            await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            await _page.WaitForLoadStateAsync();
         }
 
         public async Task FillAsync(Selector selector, string value)

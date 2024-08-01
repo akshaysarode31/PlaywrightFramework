@@ -17,18 +17,18 @@ namespace PlaywrightFramework.Tests
             Configuration = ConfigurationLoader.LoadConfiguration();
             // Initialize the browser and page
             BrowserWrapper = await PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(Configuration);
-            var tracingEnabled = bool.Parse(Configuration["Browser:Tracing"]);
-            if (tracingEnabled)
+
+            //Generating tracing file is tracing flag is enabled.
+            var traceFileName = bool.Parse(Configuration["Browser:Tracing"]) ? $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now.ToString("yyyyMMdd_HHmm")}.zip" : null;
+            if (traceFileName != null)
             {
-                await BrowserWrapper.StartTracingAsync(TestContext.CurrentContext.Test.Name);
+                await BrowserWrapper.StartTracingAsync(traceFileName);
             }
         }
 
         [TearDown]
         public async Task TearDown()
         {
-            
-
             // Clean up resources
             if (BrowserWrapper != null)
             {
@@ -53,7 +53,6 @@ namespace PlaywrightFramework.Tests
             {
                 await BrowserWrapper.DisposeAsync();
             }
-
         }
     }
 

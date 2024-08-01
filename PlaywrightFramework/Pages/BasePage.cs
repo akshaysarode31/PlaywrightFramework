@@ -39,12 +39,6 @@ namespace PlaywrightFramework.Pages
             }
         }
 
-        public async Task NavigateToAsync(string url)
-        {
-            //await BrowserWrapper.NavigateToAsync(url);
-            await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");
-        }
-
         protected async Task FillAsync(string locatorSet, string selectorName, string value)
         {
             EnsureSelectorsLoaded();
