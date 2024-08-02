@@ -21,17 +21,8 @@ namespace PlaywrightFramework.Helpers
             _tracingManager = tracingManager;
         }
 
-        public static async Task<IBrowserWrapper> CreateAsync(IConfiguration configuration)
+        public static async Task<IBrowserWrapper> CreateAsync(BrowserConfig config)
         {
-            var browserName = configuration["Browser:Name"] ?? throw new ArgumentNullException("Browser:Name is missing");
-            var headless = bool.TryParse(configuration["Browser:Headless"], out var headlessValue) ? headlessValue : true;
-            var incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) ? incognitoValue : false;
-            var viewportWidth = int.TryParse(configuration["Browser:ViewportWidth"], out var viewportWidthValue) ? viewportWidthValue : 1920; // Default width
-            var viewportHeight = int.TryParse(configuration["Browser:ViewportHeight"], out var viewportHeightValue) ? viewportHeightValue : 1080; // Default height
-            var slowMo = int.TryParse(configuration["Browser:SlowMo"], out var slowMoValue) ? slowMoValue : 0;
-            var tracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) ? tracingEnabledValue : false;
-            var defaultTimeout = int.TryParse(configuration["Browser:DefaultTimeout"], out var defaultTimeoutValue) ? defaultTimeoutValue : 30000;
-
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 
@@ -42,31 +33,32 @@ namespace PlaywrightFramework.Helpers
             { "chromium", playwright.Chromium.LaunchAsync },
         };
 
-            if (browserLaunchers.TryGetValue(browserName, out var launcher))
+            if (browserLaunchers.TryGetValue(config.BrowserName, out var launcher))
             {
-                browser = await launcher(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
+                browser = await launcher(new BrowserTypeLaunchOptions { Headless = config.Headless, SlowMo = config.SlowMo });
             }
             else
             {
-                throw new ArgumentException($"Unsupported browser: {browserName}");
+                throw new ArgumentException($"Unsupported browser: {config.BrowserName}");
             }
 
             var contextOptions = new BrowserNewContextOptions
             {
                 ViewportSize = new ViewportSize
                 {
-                    Width = viewportWidth,
-                    Height = viewportHeight
+                    Width = config.ViewportWidth,
+                    Height = config.ViewportHeight
                 },
             };
 
-            var context = incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
-            var tracingManager = new TracingManager(context, tracingEnabled);
-
-
+            var context = config.Incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
+            var tracingManager = new TracingManager(context, config.TracingEnabled);
+            if (config.TracingEnabled)
+            {
+                await tracingManager.StartTracingAsync();
+            }
             var page = await context.NewPageAsync();
-            page.SetDefaultTimeout(defaultTimeout);
-            page.SetDefaultNavigationTimeout(defaultTimeout);
+            page.SetDefaultTimeout(config.DefaultTimeout);
             return new BrowserWrapper(browser, context, page, tracingManager);
         }
 
@@ -99,11 +91,10 @@ namespace PlaywrightFramework.Helpers
         public async Task<string> GetTextContentAsync(Selector selector)
         {
             var locator = GetLocator(selector.Type, selector.Value);
-
             return await locator.TextContentAsync();
         }
 
-        public async Task StartTracingAsync(string traceName)
+        public async Task StartTracingAsync()
         {
             await _tracingManager.StartTracingAsync();
         }
@@ -129,7 +120,6 @@ namespace PlaywrightFramework.Helpers
                 _ => throw new ArgumentException($"Unknown locator type: {type}"),
             };
         }
-
         public void Dispose()
         {
             _page?.CloseAsync().GetAwaiter().GetResult();

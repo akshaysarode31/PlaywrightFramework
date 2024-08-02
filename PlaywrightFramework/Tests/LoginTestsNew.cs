@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework.Internal;
+using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
 
@@ -7,7 +8,7 @@ namespace PlaywrightFramework.Tests
     [TestFixture]
     //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Fixtures)]
-    public class LoginTests : TestSetup
+    public class LoginTestsNew : TestSetup
     {
         private IBrowserWrapper _browserWrapper;
 
@@ -20,23 +21,23 @@ namespace PlaywrightFramework.Tests
         [TearDown]
         public async Task TearDown()
         {
+            // Clean up resources
+
             if (BrowserConfig.TracingEnabled)
             {
                 // Stop tracing and save the trace
                 var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
                 var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
-                Console.WriteLine("Trace path is " + tracePath);
+                Console.WriteLine("Trace path is" + tracePath);
                 await _browserWrapper.StopTracingAsync(tracePath);
                 // Add custom reporting logic if needed
                 TestContext.AddTestAttachment(tracePath, $"{TestContext.CurrentContext.Test.Name + " Playwright Trace"}");
             }
-
-            // Clean up resources
-            await _browserWrapper.DisposeAsync();
+                await _browserWrapper.DisposeAsync();
         }
 
         [Test]
-        public async Task TestSuccessfulLogin()
+        public async Task TestSuccessfulLogin11()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -46,7 +47,7 @@ namespace PlaywrightFramework.Tests
         }
 
         [Test]
-        public async Task TestSuccessfulLogin1()
+        public async Task TestSuccessfulLogin12()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -55,7 +56,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin2()
+        public async Task TestSuccessfulLogin22()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -64,7 +65,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin3()
+        public async Task TestSuccessfulLogin32()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -73,7 +74,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin4()
+        public async Task TestSuccessfulLogin42()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -82,7 +83,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin5()
+        public async Task TestSuccessfulLogin52()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -100,7 +101,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin7()
+        public async Task TestSuccessfulLogin72()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -109,7 +110,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin8()
+        public async Task TestSuccessfulLogin82()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();
@@ -118,7 +119,7 @@ namespace PlaywrightFramework.Tests
             Assert.IsTrue(await loginPage.IsLoggedInAsync());
         }
         [Test]
-        public async Task TestSuccessfulLogin9()
+        public async Task TestSuccessfulLogin92()
         {
             var loginPage = new LoginPage(_browserWrapper, TestSetup.Configuration);
             await loginPage.InitializeAsync();

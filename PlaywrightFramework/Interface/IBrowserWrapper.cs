@@ -12,8 +12,7 @@ namespace PlaywrightFramework.Interface
         Task<bool> IsVisibleAsync(Selector selector);
         Task<string> GetTextContentAsync(Selector selector);
         Task StopTracingAsync(string tracePath);
-        Task StartTracingAsync(string traceName);
+        Task StartTracingAsync();
         Task DisposeAsync();
     }
-
 }

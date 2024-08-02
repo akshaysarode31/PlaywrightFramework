@@ -4,6 +4,21 @@ namespace PlaywrightFramework.Helpers
 {
     public static class ConfigurationLoader
     {
+        public static BrowserConfig LoadBrowserConfig(IConfiguration configuration)
+        {
+            return new BrowserConfig
+            {
+                BrowserName = configuration["Browser:Name"] ?? throw new ArgumentNullException("Browser:Name is missing"),
+                Headless = bool.TryParse(configuration["Browser:Headless"], out var headlessValue) ? headlessValue : true,
+                Incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) ? incognitoValue : false,
+                ViewportWidth = int.TryParse(configuration["Browser:ViewportWidth"], out var viewportWidthValue) ? viewportWidthValue : 1920,
+                ViewportHeight = int.TryParse(configuration["Browser:ViewportHeight"], out var viewportHeightValue) ? viewportHeightValue : 1080,
+                SlowMo = int.TryParse(configuration["Browser:SlowMo"], out var slowMoValue) ? slowMoValue : 0,
+                TracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) ? tracingEnabledValue : false,
+                DefaultTimeout = int.TryParse(configuration["Browser:DefaultTimeout"], out var defaultTimeoutValue) ? defaultTimeoutValue : 30000
+            };
+        }
+
         public static IConfiguration LoadConfiguration(string baseConfigPath = "D:\\Project\\PlaywrightFramework\\PlaywrightFramework\\Configuration\\")
         {
             try

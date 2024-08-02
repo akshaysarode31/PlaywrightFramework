@@ -20,7 +20,6 @@ namespace PlaywrightFramework.Helpers
             {
                 result[kvp.Key] = new Dictionary<string, Selector>(kvp.Value);
             }
-
             return result;
         }
     }
