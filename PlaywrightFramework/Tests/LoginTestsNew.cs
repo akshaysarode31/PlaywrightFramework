@@ -26,7 +26,7 @@ namespace PlaywrightFramework.Tests
             if (BrowserConfig.TracingEnabled)
             {
                 // Stop tracing and save the trace
-                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
+                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
                 var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
                 Console.WriteLine("Trace path is " + tracePath);
                 await _browserWrapper.StopTracingAsync(tracePath);

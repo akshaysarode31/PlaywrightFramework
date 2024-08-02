@@ -2,16 +2,10 @@
 
 namespace PlaywrightFramework.Helpers
 {
-    public class TracingManager
+    public class TracingManager(IBrowserContext context, bool isTracingEnabled)
     {
-        private readonly IBrowserContext _context;
-        private readonly bool _isTracingEnabled;
-
-        public TracingManager(IBrowserContext context, bool isTracingEnabled)
-        {
-            _context = context;
-            _isTracingEnabled = isTracingEnabled;
-        }
+        private readonly IBrowserContext _context = context;
+        private readonly bool _isTracingEnabled = isTracingEnabled;
 
         public async Task StartTracingAsync()
         {

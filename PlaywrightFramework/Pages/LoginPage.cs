@@ -3,13 +3,8 @@ using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Pages
 {
-    public class LoginPage : BasePage
+    public class LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration)
     {
-        public LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration)
-         : base(browserWrapper, configuration)
-        {
-        }
-
         public async Task InitializeAsync()
         {
             base.Initialize("Selectors");
@@ -17,7 +12,6 @@ namespace PlaywrightFramework.Pages
 
         public async Task NavigateToAsync()
         {
-            var url = Configuration["AppSettings:BaseUrl"];
             await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");
         }
 

@@ -9,12 +9,12 @@ namespace PlaywrightFramework.Helpers
             return new BrowserConfig
             {
                 BrowserName = (configuration["Browser:Name"] ?? "chromium").ToLower(),
-                Headless = bool.TryParse(configuration["Browser:Headless"], out var headlessValue) ? headlessValue : true,
-                Incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) ? incognitoValue : false,
+                Headless = !bool.TryParse(configuration["Browser:Headless"], out var headlessValue) || headlessValue,
+                Incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) && incognitoValue,
                 ViewportWidth = int.TryParse(configuration["Browser:ViewportWidth"], out var viewportWidthValue) ? viewportWidthValue : 1920,
                 ViewportHeight = int.TryParse(configuration["Browser:ViewportHeight"], out var viewportHeightValue) ? viewportHeightValue : 1080,
                 SlowMo = int.TryParse(configuration["Browser:SlowMo"], out var slowMoValue) ? slowMoValue : 0,
-                TracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) ? tracingEnabledValue : false,
+                TracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) && tracingEnabledValue,
                 DefaultTimeout = int.TryParse(configuration["Browser:DefaultTimeout"], out var defaultTimeoutValue) ? defaultTimeoutValue : 30000
             };
         }

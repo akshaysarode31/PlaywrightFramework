@@ -5,18 +5,11 @@ using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Pages
 {
-    public abstract class BasePage
+    public abstract class BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration)
     {
-        protected readonly IDictionary<string, IDictionary<string, Selector>> _selectors;
-        protected readonly IBrowserWrapper BrowserWrapper;
-        protected readonly IConfiguration Configuration;
-
-        protected BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration)
-        {
-            Configuration = configuration ?? throw new ArgumentNullException(nameof(browserWrapper));
-            BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
-            _selectors = new Dictionary<string, IDictionary<string, Selector>>();
-        }
+        protected readonly IDictionary<string, IDictionary<string, Selector>> _selectors = new Dictionary<string, IDictionary<string, Selector>>();
+        protected readonly IBrowserWrapper BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
+        protected readonly IConfiguration Configuration = configuration ?? throw new ArgumentNullException(nameof(browserWrapper));
 
         public void Initialize(params string[] pageNames)
         {
