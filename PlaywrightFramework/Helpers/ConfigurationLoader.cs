@@ -19,10 +19,11 @@ namespace PlaywrightFramework.Helpers
             };
         }
 
-        public static IConfiguration LoadConfiguration(string baseConfigPath = "D:\\Project\\PlaywrightFramework\\PlaywrightFramework\\Configuration\\")
+        public static IConfiguration LoadConfiguration()
         {
             try
             {
+                String baseConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configuration");
                 /*string plainPassword = "admin123";
                 string encryptedPassword2 = EncryptionHelper.Encrypt(plainPassword);
                 Console.WriteLine("This is encrypted password "+encryptedPassword2);*/

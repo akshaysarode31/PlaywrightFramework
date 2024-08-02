@@ -32,6 +32,9 @@
     <None Update="Configuration\appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configuration\encrypted_password.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configuration\Selectors\Selectors.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
