@@ -8,7 +8,7 @@ namespace PlaywrightFramework.Helpers
         {
             return new BrowserConfig
             {
-                BrowserName = configuration["Browser:Name"] ?? throw new ArgumentNullException("Browser:Name is missing"),
+                BrowserName = (configuration["Browser:Name"] ?? "chromium").ToLower(),
                 Headless = bool.TryParse(configuration["Browser:Headless"], out var headlessValue) ? headlessValue : true,
                 Incognito = bool.TryParse(configuration["Browser:Incognito"], out var incognitoValue) ? incognitoValue : false,
                 ViewportWidth = int.TryParse(configuration["Browser:ViewportWidth"], out var viewportWidthValue) ? viewportWidthValue : 1920,

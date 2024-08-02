@@ -23,7 +23,7 @@ namespace PlaywrightFramework.Tests
             if (BrowserConfig.TracingEnabled)
             {
                 // Stop tracing and save the trace
-                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now.ToString("yyyyMMdd_HHmm")}";
+                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
                 var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
                 Console.WriteLine("Trace path is " + tracePath);
                 await _browserWrapper.StopTracingAsync(tracePath);
@@ -42,7 +42,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin2()
@@ -61,7 +61,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin3()
@@ -70,7 +70,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin4()
@@ -79,7 +79,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin5()
@@ -88,7 +88,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin6()
@@ -97,7 +97,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin7()
@@ -106,7 +106,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin8()
@@ -115,7 +115,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
         [Test]
         public async Task TestSuccessfulLogin9()
@@ -124,7 +124,7 @@ namespace PlaywrightFramework.Tests
             await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-            Assert.IsTrue(await loginPage.IsLoggedInAsync());
+            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
     }
 }

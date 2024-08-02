@@ -27,11 +27,11 @@ namespace PlaywrightFramework.Helpers
             IBrowser browser;
 
             var browserLaunchers = new Dictionary<string, Func<BrowserTypeLaunchOptions, Task<IBrowser>>>
-        {
-            { "firefox", playwright.Firefox.LaunchAsync },
-            { "webkit", playwright.Webkit.LaunchAsync },
-            { "chromium", playwright.Chromium.LaunchAsync },
-        };
+            {
+                { "firefox", playwright.Firefox.LaunchAsync },
+                { "webkit", playwright.Webkit.LaunchAsync },
+                { "chromium", playwright.Chromium.LaunchAsync },
+            };
 
             if (browserLaunchers.TryGetValue(config.BrowserName, out var launcher))
             {

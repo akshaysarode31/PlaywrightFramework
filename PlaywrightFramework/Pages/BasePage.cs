@@ -18,7 +18,7 @@ namespace PlaywrightFramework.Pages
             _selectors = new Dictionary<string, IDictionary<string, Selector>>();
         }
 
-        public async Task InitializeAsync(params string[] pageNames)
+        public void Initialize(params string[] pageNames)
         {
             foreach (var pageName in pageNames)
             {

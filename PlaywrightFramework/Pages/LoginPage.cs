@@ -12,7 +12,7 @@ namespace PlaywrightFramework.Pages
 
         public async Task InitializeAsync()
         {
-            await base.InitializeAsync("Selectors");
+            base.Initialize("Selectors");
         }
 
         public async Task NavigateToAsync()
