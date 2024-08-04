@@ -13,7 +13,7 @@ namespace PlaywrightFramework.Pages
 
         public void Initialize(params string[] pageNames)
         {
-            foreach (var pageName in pageNames)
+            foreach (string pageName in pageNames)
             {
                 if (string.IsNullOrEmpty(pageName))
                     throw new ArgumentNullException(nameof(pageName));

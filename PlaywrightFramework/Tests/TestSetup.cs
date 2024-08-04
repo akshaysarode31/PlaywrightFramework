@@ -14,7 +14,7 @@ namespace PlaywrightFramework.Tests
     {
         public static IConfiguration Configuration { get; private set; }
         public static BrowserConfig BrowserConfig { get; private set; }
-        private IBrowserWrapper _browserWrapper;
+        public static IBrowserWrapper BrowserWrapper { get; set; }
 
 
         [OneTimeSetUp]
@@ -28,9 +28,9 @@ namespace PlaywrightFramework.Tests
         public async Task OneTimeTearDown()
         {
             // Ensure all browser instances are closed
-            if (_browserWrapper != null)
+            if (BrowserWrapper != null)
             {
-                await _browserWrapper.DisposeAsync();
+                await BrowserWrapper.DisposeAsync();
             }
         }
     }

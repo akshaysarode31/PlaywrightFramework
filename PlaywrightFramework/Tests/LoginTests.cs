@@ -15,6 +15,7 @@ namespace PlaywrightFramework.Tests
         public async Task SetUp()
         {
             _browserWrapper = await PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(TestSetup.BrowserConfig);
+            TestSetup.BrowserWrapper = _browserWrapper;
         }
 
         [TearDown]
