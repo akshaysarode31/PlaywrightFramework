@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Interface;
+using PlaywrightFramework.Pages;
 
-namespace PlaywrightFramework.Pages
+namespace OrangeHrm.Pages
 {
     public class LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration)
     {
         public async Task InitializeAsync()
         {
-            base.Initialize("Selectors");
+            Initialize("Selectors");
         }
 
         public async Task NavigateToAsync()

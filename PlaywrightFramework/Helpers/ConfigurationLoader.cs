@@ -4,9 +4,9 @@ namespace PlaywrightFramework.Helpers
 {
     public static class ConfigurationLoader
     {
-        public static BrowserConfig LoadBrowserConfig(IConfiguration configuration)
+        public static BrowserConfiguration LoadBrowserConfig(IConfiguration configuration)
         {
-            return new BrowserConfig
+            return new BrowserConfiguration
             {
                 BrowserName = (configuration["Browser:Name"] ?? "chromium").ToLower(),
                 Headless = !bool.TryParse(configuration["Browser:Headless"], out var headlessValue) || headlessValue,

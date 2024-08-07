@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaywrightFramework", "PlaywrightFramework\PlaywrightFramework.csproj", "{5FFAFA44-2125-4367-BD1C-3582F83A515E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlaywrightFramework", "PlaywrightFramework\PlaywrightFramework.csproj", "{5FFAFA44-2125-4367-BD1C-3582F83A515E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrangeHrm", "OrangeHrm\OrangeHrm.csproj", "{0ACE781F-E104-4790-AB9F-591A60D9E28B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5FFAFA44-2125-4367-BD1C-3582F83A515E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FFAFA44-2125-4367-BD1C-3582F83A515E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FFAFA44-2125-4367-BD1C-3582F83A515E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ACE781F-E104-4790-AB9F-591A60D9E28B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ACE781F-E104-4790-AB9F-591A60D9E28B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ACE781F-E104-4790-AB9F-591A60D9E28B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ACE781F-E104-4790-AB9F-591A60D9E28B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

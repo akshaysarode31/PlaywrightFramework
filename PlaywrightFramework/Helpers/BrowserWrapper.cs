@@ -1,5 +1,5 @@
-﻿using Microsoft.Playwright;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Playwright;
 using PlaywrightFramework.Interface;
 
 namespace PlaywrightFramework.Helpers
@@ -21,8 +21,9 @@ namespace PlaywrightFramework.Helpers
             _tracingManager = tracingManager;
         }
 
-        public static async Task<IBrowserWrapper> CreateAsync(BrowserConfig config)
+        public static async Task<IBrowserWrapper> CreateAsync(BrowserConfiguration config)
         {
+            config = ConfigurationLoader.LoadBrowserConfig(ConfigurationLoader.LoadConfiguration());
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 

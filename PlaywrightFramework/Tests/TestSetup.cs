@@ -1,20 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlaywrightFramework.Tests
 {
-    [SetUpFixture]
+    //[SetUpFixture]
     public class TestSetup
     {
         public static IConfiguration Configuration { get; private set; }
-        public static BrowserConfig BrowserConfig { get; private set; }
-        public static IBrowserWrapper BrowserWrapper { get; set; }
+        public static BrowserConfiguration BrowserConfig { get; private set; }
+        public static IBrowserWrapper BrowserWrappers { get; set; }
 
 
         [OneTimeSetUp]
@@ -22,15 +17,30 @@ namespace PlaywrightFramework.Tests
         {
             Configuration = ConfigurationLoader.LoadConfiguration();
             BrowserConfig = ConfigurationLoader.LoadBrowserConfig(Configuration);
+            BrowserWrappers = PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(BrowserConfig);
         }
 
         [OneTimeTearDown]
         public async Task OneTimeTearDown()
         {
-            // Ensure all browser instances are closed
-            if (BrowserWrapper != null)
+            if (BrowserConfig.TracingEnabled)
             {
-                await BrowserWrapper.DisposeAsync();
+                // Stop tracing and save the trace
+                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
+                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
+                Console.WriteLine("Trace path is " + tracePath);
+                await BrowserWrappers.StopTracingAsync(tracePath);
+                // Add custom reporting logic if needed
+                TestContext.AddTestAttachment(tracePath, $"{TestContext.CurrentContext.Test.Name + " Playwright Trace"}");
+            }
+
+            // Clean up resources
+            await BrowserWrappers.DisposeAsync();
+
+            // Ensure all browser instances are closed
+            if (BrowserWrappers != null)
+            {
+                await BrowserWrappers.DisposeAsync();
             }
         }
     }
