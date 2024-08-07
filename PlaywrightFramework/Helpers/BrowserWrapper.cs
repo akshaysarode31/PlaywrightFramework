@@ -23,7 +23,7 @@ namespace PlaywrightFramework.Helpers
 
         public static async Task<IBrowserWrapper> CreateAsync(BrowserConfiguration config)
         {
-            config = ConfigurationLoader.LoadBrowserConfig(ConfigurationLoader.LoadConfiguration());
+            //config = ConfigurationLoader.LoadBrowserConfig(ConfigurationLoader.LoadConfiguration());
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 
