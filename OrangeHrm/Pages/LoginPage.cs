@@ -4,13 +4,8 @@ using PlaywrightFramework.Pages;
 
 namespace OrangeHrm.Pages
 {
-    public class LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration)
+    public class LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration, "Selectors")
     {
-        public async Task InitializeAsync()
-        {
-            Initialize("Selectors");
-        }
-
         public async Task NavigateToAsync()
         {
             await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");

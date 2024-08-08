@@ -1,15 +1,31 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Playwright;
 using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
 
 
 namespace PlaywrightFramework.Pages
 {
-    public abstract class BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration)
+    public abstract class BasePage
     {
         protected readonly IDictionary<string, IDictionary<string, Selector>> _selectors = new Dictionary<string, IDictionary<string, Selector>>();
-        protected readonly IBrowserWrapper BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
-        protected readonly IConfiguration Configuration = configuration ?? throw new ArgumentNullException(nameof(browserWrapper));
+        protected readonly IBrowserWrapper BrowserWrapper;
+        protected readonly IConfiguration Configuration;
+
+        protected BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration, params string[] pageNames)
+        {
+            BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            // Automatically initialize selectors
+            Initialize(pageNames);
+        }
+
+        public ILocator GetLocators(string locatorSet, string selectorName)
+        {
+            EnsureSelectorsLoaded();
+            var selector = GetSelector(locatorSet, selectorName);
+            return BrowserWrapper.GetLocator(selector.Type, selector.Value);
+        }
 
         public void Initialize(params string[] pageNames)
         {
@@ -32,35 +48,40 @@ namespace PlaywrightFramework.Pages
             }
         }
 
-        protected async Task FillAsync(string locatorSet, string selectorName, string value)
+        public async Task FillAsync(string locatorSet, string selectorName, string value)
         {
             EnsureSelectorsLoaded();
             var selector = GetSelector(locatorSet, selectorName);
             await BrowserWrapper.FillAsync(selector, value);
         }
 
-        protected async Task ClickAsync(string locatorSet, string selectorName)
+        public async Task ClickAsync(string locatorSet, string selectorName)
         {
             EnsureSelectorsLoaded();
             var selector = GetSelector(locatorSet, selectorName);
             await BrowserWrapper.ClickAsync(selector);
         }
 
-        protected async Task<bool> IsVisibleAsync(string locatorSet, string selectorName)
+        public async Task<bool> IsVisibleAsync(string locatorSet, string selectorName)
         {
             EnsureSelectorsLoaded();
             var selector = GetSelector(locatorSet, selectorName);
             return await BrowserWrapper.IsVisibleAsync(selector);
         }
+        public async Task<bool> IsEnabledAsync(string locatorSet, string selectorName)
+        {
+            EnsureSelectorsLoaded();
+            return await GetLocators(locatorSet, selectorName).IsEnabledAsync();
+        }
 
-        protected async Task<string> GetTextContentAsync(string locatorSet, string selectorName)
+        public async Task<string> GetTextContentAsync(string locatorSet, string selectorName)
         {
             EnsureSelectorsLoaded();
             var selector = GetSelector(locatorSet, selectorName);
             return await BrowserWrapper.GetTextContentAsync(selector);
         }
 
-        private Selector GetSelector(string locatorSet, string selectorName)
+        public Selector GetSelector(string locatorSet, string selectorName)
         {
             if (_selectors.TryGetValue(locatorSet, out var selectors))
             {

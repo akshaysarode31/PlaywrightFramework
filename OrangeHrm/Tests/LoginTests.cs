@@ -1,56 +1,67 @@
 ﻿using NUnit.Framework.Internal;
 using OrangeHrm.Pages;
+using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
 using PlaywrightFramework.Tests;
 
 namespace OrangeHrm.Tests
 {
     [TestFixture]
-    //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Fixtures)]
     public class LoginTests : TestSetup
     {
-        //private IBrowserWrapper BrowserWrappers;
+        private LoginPage loginPage;
 
         [SetUp]
-        public async Task SetUp()
+        public async Task Initliaze()
         {
-           /* BrowserWrappers = await PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(BrowserConfig);*/
-        }
-
-        [TearDown]
-        public async Task TearDown()
-        {
-            /*if (BrowserConfig.TracingEnabled)
-            {
-                // Stop tracing and save the trace
-                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
-                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
-                Console.WriteLine("Trace path is " + tracePath);
-                await BrowserWrappers.StopTracingAsync(tracePath);
-                // Add custom reporting logic if needed
-                TestContext.AddTestAttachment(tracePath, $"{TestContext.CurrentContext.Test.Name + " Playwright Trace"}");
-            }
-
-            // Clean up resources
-            await BrowserWrappers.DisposeAsync();*/
+            loginPage = new LoginPage(BrowserWrapper, Configuration);
         }
 
         [Test]
         public async Task TestSuccessfulLogin()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
         }
 
         [Test]
+        public async Task Login_WithValidCredentials_ShouldNavigateToDashboard()
+        {
+            await loginPage.NavigateToAsync();
+            await loginPage.LoginAsync();
+            await BrowserWrapper.Page.WaitForURLAsync("**/dashboard/index");
+            Assert.That(BrowserWrapper.Page.Url, Is.EqualTo("https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index"));
+        }
+
+        [Test]
+        public async Task Login_WithInvalidCredentials_ShouldShowErrorMessage()
+        {
+            await loginPage.NavigateToAsync();
+            await loginPage.FillAsync("LoginForm", "UsernameInput", "admin");
+            await loginPage.FillAsync("LoginForm", "PasswordInput", "admiin ");
+            await loginPage.ClickAsync("LoginForm", "LoginButton");
+            var selector = loginPage.GetSelector("LoginForm", "ErrorMessage");
+            string errorMessage = await BrowserWrapper.GetTextContentAsync(selector);
+            Assert.That(errorMessage, Is.EqualTo("Invalid credentials"));
+        }
+
+        [Test]
+        public async Task Login_WithEmptyCredentials_ShouldShowErrorMessage()
+        {
+            await loginPage.NavigateToAsync();
+            await loginPage.FillAsync("LoginForm", "UsernameInput", "admin");
+            await loginPage.FillAsync("LoginForm", "PasswordInput", "");
+            await loginPage.ClickAsync("LoginForm", "LoginButton");
+            var selector = loginPage.GetSelector("LoginForm", "RequiredMessage");
+            string errorMessage = await BrowserWrapper.GetTextContentAsync(selector);
+            Assert.That(errorMessage, Is.EqualTo("Required"));
+        }
+
+        [Test]
         public async Task TestSuccessfulLogin1()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
@@ -58,8 +69,6 @@ namespace OrangeHrm.Tests
         [Test]
         public async Task TestSuccessfulLogin2()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
@@ -67,8 +76,6 @@ namespace OrangeHrm.Tests
         [Test]
         public async Task TestSuccessfulLogin3()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
@@ -76,8 +83,6 @@ namespace OrangeHrm.Tests
         [Test]
         public async Task TestSuccessfulLogin4()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
@@ -85,8 +90,6 @@ namespace OrangeHrm.Tests
         [Test]
         public async Task TestSuccessfulLogin5()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
@@ -94,35 +97,6 @@ namespace OrangeHrm.Tests
         [Test]
         public async Task TestSuccessfulLogin6()
         {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
-            await loginPage.NavigateToAsync();
-            await loginPage.LoginAsync();
-            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
-        }
-        [Test]
-        public async Task TestSuccessfulLogin7()
-        {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
-            await loginPage.NavigateToAsync();
-            await loginPage.LoginAsync();
-            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
-        }
-        [Test]
-        public async Task TestSuccessfulLogin8()
-        {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
-            await loginPage.NavigateToAsync();
-            await loginPage.LoginAsync();
-            Assert.That(await loginPage.IsLoggedInAsync(), Is.True);
-        }
-        [Test]
-        public async Task TestSuccessfulLogin9()
-        {
-            var loginPage = new LoginPage(BrowserWrappers, Configuration);
-            await loginPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
             Assert.That(await loginPage.IsLoggedInAsync(), Is.True);

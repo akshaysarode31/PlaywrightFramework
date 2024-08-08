@@ -17,7 +17,34 @@ LoginForm:
   ForgotPasswordLink:
     Type: text
     Value: 'Forgot your password?'
+  ErrorMessage:
+    Type: text
+    Value: 'Invalid credentials'
+  RequiredMessage:
+    Type: text
+    Value: 'Required'
 Dashboard:
   DashboardLabel:
-    Type: "xpath"
+    Type: xpath
     Value: "//h6[text()='Dashboard']"
+  QuickLaunchPanel:
+    Type: text
+    Value: "Quick Launch"
+  AssignLeaveIcon:
+    Type: xpath
+    Value: "//button[@title='Assign Leave']"
+  LeaveListIcon:
+    Type: xpath
+    Value: "//button[@title='Leave List']"
+  TimesheetsIcon:
+    Type: xpath
+    Value: "//button[@title='Timesheets']"
+  MyActions:
+    Type: text
+    Value: "My Actions"
+  EmployeeDistribution:
+    Type: text
+    Value: "Employee Distribution by Sub Unit"
+  TimeAtWork:
+    Type: text
+    Value: "Time at Work"

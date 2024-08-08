@@ -14,5 +14,6 @@ namespace PlaywrightFramework.Interface
         Task StopTracingAsync(string tracePath);
         Task StartTracingAsync();
         Task DisposeAsync();
+        ILocator GetLocator(string type, string value);
     }
 }

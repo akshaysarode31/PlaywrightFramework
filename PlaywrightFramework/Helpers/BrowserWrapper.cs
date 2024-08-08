@@ -12,6 +12,8 @@ namespace PlaywrightFramework.Helpers
         private readonly TracingManager _tracingManager;
 
         public IPage Page => _page;
+        public IBrowser Browser => _browser;
+        public IBrowserContext Context => _context;
 
         private BrowserWrapper(IBrowser browser, IBrowserContext context, IPage page, TracingManager tracingManager)
         {
@@ -105,7 +107,7 @@ namespace PlaywrightFramework.Helpers
             await _tracingManager.StopTracingAsync(tracePath);
         }
 
-        private ILocator GetLocator(string type, string value)
+        public ILocator GetLocator(string type, string value)
         {
             return type.ToLower() switch
             {
