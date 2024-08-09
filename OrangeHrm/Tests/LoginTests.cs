@@ -7,13 +7,14 @@ using PlaywrightFramework.Tests;
 namespace OrangeHrm.Tests
 {
     [TestFixture]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Fixtures)]
     public class LoginTests : TestSetup
     {
         private LoginPage loginPage;
 
         [SetUp]
-        public async Task Initliaze()
+        public void Initliaze()
         {
             loginPage = new LoginPage(BrowserWrapper, Configuration);
         }

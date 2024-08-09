@@ -12,6 +12,7 @@ using PlaywrightFramework.Tests;
 namespace OrangeHrm.Tests
 {
     [TestFixture]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Fixtures)]
     public class DashboardTests : TestSetup
     {
@@ -27,12 +28,6 @@ namespace OrangeHrm.Tests
             //await dashboardPage.InitializeAsync();
             await loginPage.NavigateToAsync();
             await loginPage.LoginAsync();
-        }
-
-        [TearDown]
-        public async Task Teardown()
-        {
-            //await BrowserWrapper.DisposeAsync();
         }
 
         [Test]

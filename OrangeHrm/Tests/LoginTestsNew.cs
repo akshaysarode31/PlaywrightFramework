@@ -6,41 +6,16 @@ using PlaywrightFramework.Tests;
 namespace OrangeHrm.Tests
 {
     [TestFixture]
-    //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Fixtures)]
     public class LoginTestsNew : TestSetup
     {
         private LoginPage loginPage;
 
         [SetUp]
-        public async Task Initliaze()
+        public void Initliaze()
         {
             loginPage = new LoginPage(BrowserWrapper, Configuration);
-        }
-        //private IBrowserWrapper BrowserWrapper;
-
-        [SetUp]
-        public async Task SetUp()
-        {
-            //BrowserWrapper = await PlaywrightFramework.Helpers.BrowserWrapper.CreateAsync(BrowserConfig);
-        }
-
-        [TearDown]
-        public async Task TearDown()
-        {
-            // Clean up resources
-
-            /*if (BrowserConfig.TracingEnabled)
-            {
-                // Stop tracing and save the trace
-                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
-                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
-                Console.WriteLine("Trace path is " + tracePath);
-                await BrowserWrapper.StopTracingAsync(tracePath);
-                // Add custom reporting logic if needed
-                TestContext.AddTestAttachment(tracePath, $"{TestContext.CurrentContext.Test.Name + " Playwright Trace"}");
-            }
-            await BrowserWrapper.DisposeAsync();*/
         }
 
         [Test]
