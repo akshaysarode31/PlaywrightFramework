@@ -7,9 +7,9 @@ namespace PlaywrightFramework.Tests
 {
     public class TestSetup
     {
-        public static IConfiguration Configuration { get; private set; }
-        public static BrowserConfiguration BrowserConfig { get; private set; }
-        public static IBrowserWrapper BrowserWrapper { get; set; }
+        public IConfiguration Configuration { get; private set; }
+        public BrowserConfiguration BrowserConfig { get; private set; }
+        public IBrowserWrapper BrowserWrapper { get; set; }
 
 
         [SetUp]

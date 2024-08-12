@@ -7,8 +7,8 @@ using PlaywrightFramework.Tests;
 namespace OrangeHrm.Tests
 {
     [TestFixture]
-    [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
-    [Parallelizable(ParallelScope.Fixtures)]
+    //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+    [Parallelizable(ParallelScope.Self)]
     public class LoginTests : TestSetup
     {
         private LoginPage loginPage;

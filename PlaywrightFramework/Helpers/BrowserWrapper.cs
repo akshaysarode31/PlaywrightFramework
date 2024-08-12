@@ -132,9 +132,12 @@ namespace PlaywrightFramework.Helpers
 
         public async Task DisposeAsync()
         {
-            await _page.CloseAsync();
+            _page?.CloseAsync().GetAwaiter().GetResult();
+            _context?.CloseAsync().GetAwaiter().GetResult();
+            _browser?.CloseAsync().GetAwaiter().GetResult();
+            /*await _page.CloseAsync();
             await _context.CloseAsync();
-            await _browser.CloseAsync();
+            await _browser.CloseAsync();*/
         }
     }
 
