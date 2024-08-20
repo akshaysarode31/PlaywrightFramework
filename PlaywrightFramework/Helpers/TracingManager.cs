@@ -14,7 +14,8 @@ namespace PlaywrightFramework.Helpers
                 await _context.Tracing.StartAsync(new TracingStartOptions
                 {
                     Screenshots = true,
-                    Snapshots = true
+                    Snapshots = true,
+                    Sources = true
                 });
             }
         }

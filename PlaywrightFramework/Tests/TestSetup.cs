@@ -22,23 +22,22 @@ namespace PlaywrightFramework.Tests
 
         [TearDown]
         public async Task TearDown()
-        { 
+        {
+            if (BrowserConfig.TracingEnabled)
+            {
+                // Stop tracing and save the trace
+                var traceFileName = $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
+                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory,"PlaywrightTraces",$"{traceFileName}.zip");
+                Console.WriteLine("Trace path is " + tracePath);
+                await BrowserWrapper.StopTracingAsync(tracePath);
+            }
             await BrowserWrapper.DisposeAsync();
         }
 
         [OneTimeTearDown]
         public async Task OneTimeTearDown()
         {
-            if (BrowserConfig.TracingEnabled)
-            {
-                // Stop tracing and save the trace
-                var traceFileName = $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}";
-                var tracePath = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{traceFileName}.zip");
-                Console.WriteLine("Trace path is " + tracePath);
-                await BrowserWrapper.StopTracingAsync(tracePath);
-                // Add custom reporting logic if needed
-                TestContext.AddTestAttachment(tracePath, $"{TestContext.CurrentContext.Test.Name + " Playwright Trace"}");
-            }
+            
 
             // Clean up resources
             // Ensure all browser instances are closed
