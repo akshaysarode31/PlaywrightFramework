@@ -10,5 +10,6 @@
         public int SlowMo { get; set; }
         public bool TracingEnabled { get; set; }
         public int DefaultTimeout { get; set; }
+        public bool Recording { get; set; }
     }
 }

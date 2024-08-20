@@ -16,7 +16,7 @@ namespace OrangeHrm.Tests
         [SetUp]
         public void Initliaze()
         {
-            loginPage = new LoginPage(BrowserWrapper, Configuration);
+            loginPage = new LoginPage(BrowserWrapper);
         }
 
         [Test]

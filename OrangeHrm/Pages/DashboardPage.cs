@@ -5,7 +5,7 @@ using PlaywrightFramework.Pages;
 
 namespace OrangeHrm.Pages
 {
-    public class DashboardPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration, "Selectors")
+    public class DashboardPage(IBrowserWrapper browserWrapper) : BasePage(browserWrapper, "Selectors")
     {
         public async Task<bool> IsLoggedInAsync()
         {

@@ -12,10 +12,10 @@ namespace PlaywrightFramework.Pages
         protected readonly IBrowserWrapper BrowserWrapper;
         protected readonly IConfiguration Configuration;
 
-        protected BasePage(IBrowserWrapper browserWrapper, IConfiguration configuration, params string[] pageNames)
+        protected BasePage(IBrowserWrapper browserWrapper, params string[] pageNames)
         {
             BrowserWrapper = browserWrapper ?? throw new ArgumentNullException(nameof(browserWrapper));
-            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            Configuration = Configuration = ConfigurationLoader.LoadConfiguration();
             // Automatically initialize selectors
             Initialize(pageNames);
         }

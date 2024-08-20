@@ -15,6 +15,7 @@ namespace PlaywrightFramework.Helpers
                 ViewportHeight = int.TryParse(configuration["Browser:ViewportHeight"], out var viewportHeightValue) ? viewportHeightValue : 1080,
                 SlowMo = int.TryParse(configuration["Browser:SlowMo"], out var slowMoValue) ? slowMoValue : 0,
                 TracingEnabled = bool.TryParse(configuration["Browser:Tracing"], out var tracingEnabledValue) && tracingEnabledValue,
+                Recording = bool.TryParse(configuration["Browser:Recording"], out var recordingValue) && recordingValue,
                 DefaultTimeout = int.TryParse(configuration["Browser:DefaultTimeout"], out var defaultTimeoutValue) ? defaultTimeoutValue : 30000
             };
         }

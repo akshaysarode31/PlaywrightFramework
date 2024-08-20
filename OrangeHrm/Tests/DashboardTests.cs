@@ -22,8 +22,8 @@ namespace OrangeHrm.Tests
         [SetUp]
         public async Task Setup()
         {
-            loginPage = new LoginPage(BrowserWrapper, Configuration);
-            dashboardPage = new DashboardPage(BrowserWrapper, Configuration);
+            loginPage = new LoginPage(BrowserWrapper);
+            dashboardPage = new DashboardPage(BrowserWrapper);
             //await loginPage.InitializeAsync();
             //await dashboardPage.InitializeAsync();
             await loginPage.NavigateToAsync();

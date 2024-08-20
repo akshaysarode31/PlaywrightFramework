@@ -4,7 +4,7 @@ using PlaywrightFramework.Pages;
 
 namespace OrangeHrm.Pages
 {
-    public class LoginPage(IBrowserWrapper browserWrapper, IConfiguration configuration) : BasePage(browserWrapper, configuration, "Selectors")
+    public class LoginPage(IBrowserWrapper browserWrapper) : BasePage(browserWrapper, "Selectors")
     {
         public async Task NavigateToAsync()
         {

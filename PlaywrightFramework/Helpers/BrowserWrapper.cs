@@ -25,7 +25,6 @@ namespace PlaywrightFramework.Helpers
 
         public static async Task<IBrowserWrapper> CreateAsync(BrowserConfiguration config)
         {
-            //config = ConfigurationLoader.LoadBrowserConfig(ConfigurationLoader.LoadConfiguration());
             var playwright = await Playwright.CreateAsync();
             IBrowser browser;
 
@@ -45,6 +44,7 @@ namespace PlaywrightFramework.Helpers
                 throw new ArgumentException($"Unsupported browser: {config.BrowserName}");
             }
 
+            String VideoPath = Path.Combine("Videos", $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmm}");
             var contextOptions = new BrowserNewContextOptions
             {
                 ViewportSize = new ViewportSize
@@ -53,8 +53,13 @@ namespace PlaywrightFramework.Helpers
                     Height = config.ViewportHeight
                 },
             };
+            if (config.Recording)
+            {
+                contextOptions.RecordVideoDir = "Videos/";
+                contextOptions.RecordVideoSize = new RecordVideoSize() { Width = 640, Height = 480 };
+            }
 
-            var context = config.Incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync();
+                var context = config.Incognito ? await browser.NewContextAsync(contextOptions) : await browser.NewContextAsync(contextOptions);
             var tracingManager = new TracingManager(context, config.TracingEnabled);
             if (config.TracingEnabled)
             {
