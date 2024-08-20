@@ -123,6 +123,11 @@ namespace PlaywrightFramework.Helpers
                 _ => throw new ArgumentException($"Unknown locator type: {type}"),
             };
         }
+
+        public ILocator GetByRole(AriaRole role, String name, bool exact = false)
+        {
+            return _page.GetByRole(role, new() { Name = name, Exact = exact });
+        }
         public void Dispose()
         {
             _page?.CloseAsync().GetAwaiter().GetResult();
