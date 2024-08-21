@@ -1,5 +1,4 @@
 ﻿using Allure.NUnit.Attributes;
-using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
 

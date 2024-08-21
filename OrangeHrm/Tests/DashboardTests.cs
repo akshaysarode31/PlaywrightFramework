@@ -1,12 +1,4 @@
-﻿using Microsoft.Playwright.NUnit;
-using Microsoft.Playwright;
-using OrangeHrm.Pages;
-using PlaywrightFramework.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrangeHrm.Pages;
 using PlaywrightFramework.Tests;
 using Allure.NUnit.Attributes;
 

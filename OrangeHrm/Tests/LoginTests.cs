@@ -1,9 +1,6 @@
-﻿using Allure.NUnit;
-using Allure.NUnit.Attributes;
+﻿using Allure.NUnit.Attributes;
 using NUnit.Framework.Internal;
 using OrangeHrm.Pages;
-using PlaywrightFramework.Helpers;
-using PlaywrightFramework.Interface;
 using PlaywrightFramework.Tests;
 
 namespace OrangeHrm.Tests
