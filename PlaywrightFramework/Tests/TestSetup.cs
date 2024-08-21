@@ -2,17 +2,29 @@
 using PlaywrightFramework.Helpers;
 using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
+using Allure.NUnit;
+using Microsoft.Playwright;
+using Allure.Net.Commons;
+using Allure.NUnit.Attributes;
 
 namespace PlaywrightFramework.Tests
 {
+    [AllureNUnit]
     public class TestSetup
     {
         public IConfiguration Configuration { get; private set; }
         public BrowserConfiguration BrowserConfig { get; private set; }
         public IBrowserWrapper BrowserWrapper { get; set; }
 
+        [OneTimeSetUp]
+        [AllureBefore("Cleanup Result Directory")]
+        public void CleanupResultDirectory()
+        {
+            AllureLifecycle.Instance.CleanupResultDirectory();
+        }
 
         [SetUp]
+        [AllureBefore("Setup session")]
         public async Task GlobalSetup()
         {
             Configuration = ConfigurationLoader.LoadConfiguration();
@@ -21,6 +33,7 @@ namespace PlaywrightFramework.Tests
         }
 
         [TearDown]
+        [AllureAfter("Dispose Session")]
         public async Task TearDown()
         {
             if (BrowserConfig.TracingEnabled)
@@ -35,6 +48,7 @@ namespace PlaywrightFramework.Tests
         }
 
         [OneTimeTearDown]
+        [AllureAfter("Generate Allure Reports Dispose Session")]
         public async Task OneTimeTearDown()
         {
             
@@ -45,6 +59,9 @@ namespace PlaywrightFramework.Tests
             {
                 await BrowserWrapper.DisposeAsync();
             }
+
+            AllureReportGenerator.GenerateAllureReport();
+            //AllureReportGenerator.OpenAllureReport();
         }
     }
 }

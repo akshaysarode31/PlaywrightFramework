@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Allure.NUnit.Attributes;
+using Microsoft.Extensions.Configuration;
 using PlaywrightFramework.Interface;
 using PlaywrightFramework.Pages;
 
@@ -6,11 +7,13 @@ namespace OrangeHrm.Pages
 {
     public class LoginPage(IBrowserWrapper browserWrapper) : BasePage(browserWrapper, "Selectors")
     {
+        [AllureStep("Navigate To Async")]
         public async Task NavigateToAsync()
         {
             await BrowserWrapper.NavigateToAsync($"{Configuration["AppSettings:BaseUrl"]}");
         }
 
+        [AllureStep("Login Async")]
         public async Task LoginAsync()
         {
             var username = Configuration["User:Username"];
@@ -21,6 +24,7 @@ namespace OrangeHrm.Pages
             await ClickAsync("LoginForm", "LoginButton");
         }
 
+        [AllureStep("Is Logged In Async")]
         public async Task<bool> IsLoggedInAsync()
         {
             return await IsVisibleAsync("Dashboard", "DashboardLabel");

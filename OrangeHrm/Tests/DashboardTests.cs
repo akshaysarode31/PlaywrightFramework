@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PlaywrightFramework.Tests;
+using Allure.NUnit.Attributes;
 
 namespace OrangeHrm.Tests
 {
     [TestFixture]
-    //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     [Parallelizable(ParallelScope.Self)]
     public class DashboardTests : TestSetup
     {
@@ -20,6 +20,7 @@ namespace OrangeHrm.Tests
         private DashboardPage dashboardPage;
 
         [SetUp]
+        [AllureBefore("Login to application")]
         public async Task Setup()
         {
             loginPage = new LoginPage(BrowserWrapper);
@@ -31,6 +32,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("Dashboard Label Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task DashboardLabel_ShouldBeVisible()
         {
             var isVisible = await dashboardPage.IsDashboardLabelVisible();
@@ -38,6 +41,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("Quick Launch Panel Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task QuickLaunchPanel_ShouldBeVisible()
         {
             var isVisible = await dashboardPage.IsQuickLaunchPanelVisible();
@@ -45,6 +50,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName(" Assign Leave Icon Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task AssignLeaveIcon_ShouldBeClickable()
         {
             var isClickable = await dashboardPage.IsAssignLeaveIconClickable();
@@ -52,6 +59,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("leave List icon Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task LeaveListIcon_ShouldBeClickable()
         {
             var isClickable = await dashboardPage.IsLeaveListIconClickable();
@@ -59,6 +68,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("Timesheet icon Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task TimesheetsIcon_ShouldBeClickable()
         {
             var isClickable = await dashboardPage.IsTimesheetsIconClickable();
@@ -66,6 +77,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("My Actions Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task MyActions_ShouldBeVisible()
         {
             var isVisible = await dashboardPage.IsMyActionsVisible();
@@ -73,6 +86,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("Employee Distribution Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task EmployeeDistribution_ShouldBeVisible()
         {
             var isVisible = await dashboardPage.IsEmployeeDistributionVisible();
@@ -80,6 +95,8 @@ namespace OrangeHrm.Tests
         }
 
         [Test]
+        [AllureName("Time At Work Should Be Visible")]
+        [AllureTag("Smoke")]
         public async Task TimeAtWork_ShouldBeVisible()
         {
             var isVisible = await dashboardPage.IsTimeAtWorkVisible();
